@@ -1,0 +1,132 @@
+{
+ "cells": [
+  {
+   "cell_type": "code",
+   "execution_count": 1,
+   "metadata": {},
+   "outputs": [
+    {
+     "ename": "ModuleNotFoundError",
+     "evalue": "No module named 'dotenv'",
+     "output_type": "error",
+     "traceback": [
+      "\u001b[1;31m---------------------------------------------------------------------------\u001b[0m",
+      "\u001b[1;31mModuleNotFoundError\u001b[0m                       Traceback (most recent call last)",
+      "\u001b[1;32m<ipython-input-1-a77e1f7291b3>\u001b[0m in \u001b[0;36m<module>\u001b[1;34m\u001b[0m\n\u001b[0;32m      1\u001b[0m \u001b[1;32mimport\u001b[0m \u001b[0mos\u001b[0m\u001b[1;33m\u001b[0m\u001b[1;33m\u001b[0m\u001b[0m\n\u001b[0;32m      2\u001b[0m \u001b[1;32mimport\u001b[0m \u001b[0mrequests\u001b[0m\u001b[1;33m\u001b[0m\u001b[1;33m\u001b[0m\u001b[0m\n\u001b[1;32m----> 3\u001b[1;33m \u001b[1;32mfrom\u001b[0m \u001b[0mdotenv\u001b[0m \u001b[1;32mimport\u001b[0m \u001b[0mload_dotenv\u001b[0m\u001b[1;33m\u001b[0m\u001b[1;33m\u001b[0m\u001b[0m\n\u001b[0m\u001b[0;32m      4\u001b[0m \u001b[1;32mimport\u001b[0m \u001b[0mrandom\u001b[0m\u001b[1;33m\u001b[0m\u001b[1;33m\u001b[0m\u001b[0m\n\u001b[0;32m      5\u001b[0m \u001b[1;33m\u001b[0m\u001b[0m\n",
+      "\u001b[1;31mModuleNotFoundError\u001b[0m: No module named 'dotenv'"
+     ]
+    }
+   ],
+   "source": [
+    "import os\n",
+    "import requests\n",
+    "from dotenv import load_dotenv\n",
+    "import random\n",
+    "\n",
+    "load_dotenv()\n",
+    "\n",
+    "# API key (use \"textbelt\" for free, replace with real key if paid)\n",
+    "TEXTBELT_KEY = '355950fa61b34a207c64acbc4c72c2eff2003ab8KfBbdn6JoAPRJ9dZnP473HTHV'\n",
+    "\n",
+    "# File paths\n",
+    "FACTS_FILE = \"duck_fact.txt\"\n",
+    "SENT_FILE = \"sent_facts.txt\"\n",
+    "RECIPIENTS_FILE = \"recipients.txt\"\n",
+    "WELCOMED_FILE = \"welcomed_recipients.txt\"\n",
+    "\n",
+    "# Load facts\n",
+    "with open(FACTS_FILE, \"r\") as f:\n",
+    "    all_facts = [line.strip() for line in f if line.strip()]\n",
+    "\n",
+    "# Load sent facts\n",
+    "sent_facts = []\n",
+    "if os.path.exists(SENT_FILE):\n",
+    "    with open(SENT_FILE, \"r\") as f:\n",
+    "        sent_facts = [line.strip() for line in f]\n",
+    "\n",
+    "# Load recipients\n",
+    "with open(RECIPIENTS_FILE, \"r\") as f:\n",
+    "    recipients = [line.strip() for line in f if line.strip()]\n",
+    "\n",
+    "# Load welcomed recipients\n",
+    "welcomed = []\n",
+    "if os.path.exists(WELCOMED_FILE):\n",
+    "    with open(WELCOMED_FILE, \"r\") as f:\n",
+    "        welcomed = [line.strip() for line in f]\n",
+    "\n",
+    "# Choose a fact that hasn't been sent\n",
+    "unsent_facts = list(set(all_facts) - set(sent_facts))\n",
+    "if not unsent_facts:\n",
+    "    unsent_facts = all_facts\n",
+    "    sent_facts = []\n",
+    "\n",
+    "fact = random.choice(unsent_facts)\n",
+    "fact_message = f\"🦆 Duck Fact: {fact}\"\n",
+    "\n",
+    "def send_sms(phone, message):\n",
+    "    response = requests.post('https://textbelt.com/text', {\n",
+    "        'phone': phone,\n",
+    "        'message': message,\n",
+    "        'key': TEXTBELT_KEY,\n",
+    "    })\n",
+    "    print(f\"Sending to {phone}: {response.json()}\")\n",
+    "\n",
+    "# Send messages\n",
+    "for number in recipients:\n",
+    "    # Send welcome message if not already welcomed\n",
+    "    if number not in welcomed:\n",
+    "        welcome = \"\"\"\n",
+    "        🦆 Welcome to Duck Facts Daily!\n",
+    "        Where the facts are feathered and the knowledge never waddles behind.\n",
+    "        From curious quacks to pond-side peculiarities, you’ll get one delightful duck fact a day—no bill, no fuss.\n",
+    "\n",
+    "        We’re serious about ducks.\n",
+    "        (But not *too* serious—we're not quackers.)\n",
+    "        \"\"\"\n",
+    "        \n",
+    "        send_sms(number, welcome)\n",
+    "        welcomed.append(number)\n",
+    "\n",
+    "    # Send duck fact\n",
+    "    send_sms(number, fact_message)\n",
+    "\n",
+    "# Save welcomed\n",
+    "with open(WELCOMED_FILE, \"w\") as f:\n",
+    "    for number in welcomed:\n",
+    "        f.write(number + \"\\n\")\n",
+    "\n",
+    "# Save sent fact\n",
+    "with open(SENT_FILE, \"a\") as f:\n",
+    "    f.write(fact + \"\\n\")"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "Python 3",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.8.5"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 4
+}
