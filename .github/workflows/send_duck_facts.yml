@@ -1,9 +1,6 @@
 name: Daily Duck Facts
 
 on:
-  push:
-    branches:
-      - main
   schedule:
     - cron: '0 16 * * *' # Runs daily at 16:00 UTC (adjust if needed)
   workflow_dispatch: # Allows manual run from GitHub
