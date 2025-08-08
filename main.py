@@ -13,7 +13,7 @@ if not os.path.exists(FACTS_FILE):
     raise FileNotFoundError(f"Cannot find {FACTS_FILE} in the current directory.")
 
 # API key from environment variable
-TEXTBELT_KEY = os.getenv("TEXTBELT_KEY")  # make sure it's set in GitHub Secrets
+TEXTBELT_KEY = '355950fa61b34a207c64acbc4c72c2eff2003ab8KfBbdn6JoAPRJ9dZnP473HTHV'
 
 # Load facts
 with open(FACTS_FILE, "r") as f:
