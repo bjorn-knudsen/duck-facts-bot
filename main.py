@@ -1,9 +1,6 @@
 import os
 import requests
-from dotenv import load_dotenv
 import random
-
-load_dotenv()
 
 # API key (use "textbelt" for free, replace with real key if paid)
 TEXTBELT_KEY = '355950fa61b34a207c64acbc4c72c2eff2003ab8KfBbdn6JoAPRJ9dZnP473HTHV'
