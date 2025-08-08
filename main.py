@@ -6,7 +6,7 @@ import random
 TEXTBELT_KEY = '355950fa61b34a207c64acbc4c72c2eff2003ab8KfBbdn6JoAPRJ9dZnP473HTHV'
 
 # File paths
-FACTS_FILE = "duck_fact.txt"
+FACTS_FILE = "duck_facts.txt"
 SENT_FILE = "sent_facts.txt"
 RECIPIENTS_FILE = "recipients.txt"
 WELCOMED_FILE = "welcomed_recipients.txt"
