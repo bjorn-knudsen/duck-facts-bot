@@ -1,15 +1,19 @@
 import os
 import requests
 import random
+from textwrap import dedent
 
-# API key (use "textbelt" for free, replace with real key if paid)
-TEXTBELT_KEY = '355950fa61b34a207c64acbc4c72c2eff2003ab8KfBbdn6JoAPRJ9dZnP473HTHV'
-
-# File paths
+# File paths (assign first!)
 FACTS_FILE = "duck_facts.txt"
 SENT_FILE = "sent_facts.txt"
 RECIPIENTS_FILE = "recipients.txt"
 WELCOMED_FILE = "welcomed_recipients.txt"
+
+if not os.path.exists(FACTS_FILE):
+    raise FileNotFoundError(f"Cannot find {FACTS_FILE} in the current directory.")
+
+# API key from environment variable
+TEXTBELT_KEY = os.getenv("TEXTBELT_KEY")  # make sure it's set in GitHub Secrets
 
 # Load facts
 with open(FACTS_FILE, "r") as f:
@@ -52,15 +56,14 @@ def send_sms(phone, message):
 for number in recipients:
     # Send welcome message if not already welcomed
     if number not in welcomed:
-        welcome = """
-        🦆 Welcome to Duck Facts Daily!
-        Where the facts are feathered and the knowledge never waddles behind.
-        From curious quacks to pond-side peculiarities, you’ll get one delightful duck fact a day—no bill, no fuss.
+        welcome = dedent("""
+            🦆 Welcome to Duck Facts Daily!
+            Where the facts are feathered and the knowledge never waddles behind.
+            From curious quacks to pond-side peculiarities, you’ll get one delightful duck fact a day—no bill, no fuss.
 
-        We’re serious about ducks.
-        (But not *too* serious—we're not quackers.)
-        """
-        
+            We’re serious about ducks.
+            (But not *too* serious—we're not quackers.)
+            """).strip()
         send_sms(number, welcome)
         welcomed.append(number)
 
