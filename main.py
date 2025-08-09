@@ -16,9 +16,9 @@ if not os.path.exists(FACTS_FILE):
     raise FileNotFoundError(f"Cannot find {FACTS_FILE} in the current directory.")
 
 # Vonage credentials from env vars
-VONAGE_API_KEY = os.getenv("VONAGE_API_KEY")
-VONAGE_API_SECRET = os.getenv("VONAGE_API_SECRET")
-VONAGE_VIRTUAL_NUMBER = os.getenv("VONAGE_VIRTUAL_NUMBER")
+VONAGE_API_KEY = 14fa5c9b
+VONAGE_API_SECRET = 4oCa8MYQeWReUvUx
+VONAGE_VIRTUAL_NUMBER = 15172736905
 
 if not all([VONAGE_API_KEY, VONAGE_API_SECRET, VONAGE_VIRTUAL_NUMBER]):
     raise EnvironmentError("Vonage credentials (API key, secret, virtual number) must be set in environment variables.")
