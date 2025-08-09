@@ -23,11 +23,9 @@ VONAGE_VIRTUAL_NUMBER = os.getenv("VONAGE_VIRTUAL_NUMBER")
 if not all([VONAGE_API_KEY, VONAGE_API_SECRET, VONAGE_VIRTUAL_NUMBER]):
     raise EnvironmentError("Vonage credentials (API key, secret, virtual number) must be set in environment variables.")
 
-# Initialize Vonage client
-client = vonage.Sms(
-    key=VONAGE_API_KEY,
-    secret=VONAGE_API_SECRET
-)
+# Vonage client setup
+client = vonage.Client(key=VONAGE_API_KEY, secret=VONAGE_API_SECRET)
+sms = vonage.Sms(client)
 
 
 # Load facts
@@ -59,14 +57,18 @@ if not unsent_facts:
 fact = random.choice(unsent_facts)
 fact_message = f"🦆 Prepare of a moment of pure duck-lightenment - your brain pond is about to get a fresh ripple because here comes your Duck Fact of the Day! Duck Fact: {fact}"
 
-# Send SMS
-for number in recipients:
-    response = client.send_message({
+# Send SMS function
+def send_sms(to_number, message):
+    response = sms.send_message({
         "from": VONAGE_VIRTUAL_NUMBER,
-        "to": number,
-        "text": fact_message
+        "to": to_number,
+        "text": message,
     })
-    print(f"Sent to {number}: {response}")
+    print(f"Sending to {to_number}: {response}")
+
+# Send messages
+for number in recipients:
+    send_sms(number, fact_message)
 
 # Save the sent fact
 with open(SENT_FILE, "a") as f:
