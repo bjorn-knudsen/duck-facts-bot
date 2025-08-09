@@ -19,6 +19,7 @@ jobs:
 
       - name: Install dependencies
         run: pip install requests
+        run: pip vonage
 
       - name: Run duck facts script
         env:
