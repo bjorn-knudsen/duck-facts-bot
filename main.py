@@ -42,7 +42,7 @@ if not unsent_facts:
     sent_facts = []
 
 fact = random.choice(unsent_facts)
-fact_message = f"🦆 Duck Fact: {fact}"
+fact_message = f"🦆 Prepare of a moment of pure duck-lightenment - your brain pond is about to get a fresh ripple because here comes your Duck Fact of the Day! Duck Fact: {fact}"
 
 def send_sms(phone, message):
     response = requests.post('https://textbelt.com/text', {
@@ -52,29 +52,10 @@ def send_sms(phone, message):
     })
     print(f"Sending to {phone}: {response.json()}")
 
-# Send messages
+# Send the fact to all recipients
 for number in recipients:
-    # Send welcome message if not already welcomed
-    if number not in welcomed:
-        welcome = dedent("""
-            🦆 Welcome to Duck Facts Daily!
-            Where the facts are feathered and the knowledge never waddles behind.
-            From curious quacks to pond-side peculiarities, you’ll get one delightful duck fact a day—no bill, no fuss.
-
-            We’re serious about ducks.
-            (But not *too* serious—we're not quackers.)
-            """).strip()
-        send_sms(number, welcome)
-        welcomed.append(number)
-
-    # Send duck fact
     send_sms(number, fact_message)
 
-# Save welcomed
-with open(WELCOMED_FILE, "w") as f:
-    for number in welcomed:
-        f.write(number + "\n")
-
-# Save sent fact
+# Save the sent fact
 with open(SENT_FILE, "a") as f:
     f.write(fact + "\n")
