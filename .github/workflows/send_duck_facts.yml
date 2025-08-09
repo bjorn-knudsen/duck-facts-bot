@@ -18,8 +18,7 @@ jobs:
           python-version: '3.11'
 
       - name: Install dependencies
-        run: pip install requests
-		pip install vonage
+        run: pip install requests vonage python-dotenv
 
       - name: Run duck facts script
         env:
