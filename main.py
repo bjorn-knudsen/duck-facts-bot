@@ -1,7 +1,10 @@
 import os
 import requests
 import random
+import vonage
 from textwrap import dedent
+from dotenv import load_dotenv
+
 
 # File paths (assign first!)
 FACTS_FILE = "duck_facts.txt"
@@ -12,8 +15,18 @@ WELCOMED_FILE = "welcomed_recipients.txt"
 if not os.path.exists(FACTS_FILE):
     raise FileNotFoundError(f"Cannot find {FACTS_FILE} in the current directory.")
 
-# API key from environment variable
-TEXTBELT_KEY = '355950fa61b34a207c64acbc4c72c2eff2003ab8KfBbdn6JoAPRJ9dZnP473HTHV'
+# Vonage credentials from env vars
+VONAGE_API_KEY = os.getenv("VONAGE_API_KEY")
+VONAGE_API_SECRET = os.getenv("VONAGE_API_SECRET")
+VONAGE_VIRTUAL_NUMBER = os.getenv("VONAGE_VIRTUAL_NUMBER")
+
+if not all([VONAGE_API_KEY, VONAGE_API_SECRET, VONAGE_VIRTUAL_NUMBER]):
+    raise EnvironmentError("Vonage credentials (API key, secret, virtual number) must be set in environment variables.")
+
+# Initialize Vonage client
+client = vonage.Client(key=VONAGE_API_KEY, secret=VONAGE_API_SECRET)
+sms = vonage.Sms(client)
+
 
 # Load facts
 with open(FACTS_FILE, "r") as f:
