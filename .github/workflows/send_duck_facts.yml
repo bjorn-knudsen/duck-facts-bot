@@ -20,8 +20,6 @@ jobs:
       - name: Install dependencies
         run: pip install requests
 
-        run: pip python-dotenv
-
       - name: Run duck facts script
         env:
           VONAGE_API_KEY: ${{ secrets.VONAGE_API_KEY }}
