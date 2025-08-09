@@ -22,8 +22,6 @@ jobs:
 
         run: pip python-dotenv
 
-        run: pip install vonage
-
       - name: Run duck facts script
         env:
           VONAGE_API_KEY: ${{ secrets.VONAGE_API_KEY }}
